@@ -1,0 +1,193 @@
+<!doctype html>
+<html>
+ <head>
+  <meta charset="UTF-8">
+  <meta name="Author" content="ZacharyJoke">
+  <meta name="Description" content="这里加一句话来描述你的html">
+  <title>互动聊天机器人</title>
+  <style type="text/css"> 
+  		*{margin:0;padding:0;}
+  		body{
+  			background: url("./images/1.jpg") no-repeat top center;
+  			background-size: cover;
+  			font-family: "微软雅黑"; 
+  			font-size: 12px;
+  			color: #666；
+  		}
+  		img{
+  			border: none;
+  			border-radius: 50%;
+  		}
+  		.container{
+	  		width: 700px;
+	 	  	height: 700px;
+	    	background: #f5e2e2;
+	    	margin: 80px auto;
+	    	border-radius: 15px 15px 0px 0px;
+		}
+		/*header start*/
+		.container .header{
+			height: 60px;
+			background:#06F;
+			border-radius: 15px 15px 0px 0px;
+			position: relative;
+		}
+		.header .logo{
+			width: 435px;
+			height: 88px;
+			position: absolute;
+			bottom: 0px;
+		}
+		.header .hide{
+			width: 76px;
+			height: 60px;
+			float: right;
+			color: #fff;
+			font:20px/60px 微软雅黑;
+			text-align: center;
+		}
+		/*header end*/
+
+		/*center start*/
+		.container .center{
+			height: 500px;
+			background: #EFF0F2;
+			border: 1px solid green;
+			padding: 10px;
+			overflow: auto;
+		}
+		.center .left{
+			width: 100%;
+			font-size: 16px;
+			color:#F60;
+		}
+		.center .right{
+			width: 100%;
+			font-size: 16px;
+			color: #00F;
+			text-align: right;
+		}
+		/*center end*/
+
+		/*send start*/
+		.container .send{
+			height: 120px;
+		}
+		.send #sendContent{
+			width: 700px;
+			height: 70px;
+			border: none;
+			border-top: 1px solid #ddd;
+			outline: medium;
+		}
+		.send .bottom{
+			height: 50px;
+			cursor: pointer;
+		}
+		.bottom span{
+			margin-left: 20px;
+		}
+		.bottom #button{
+			width: 100px;
+			float: right;
+			border: none;
+			background: #33F;
+			margin: 5px;
+			color: #FFF;
+			border-radius: 10px;
+			height: 30px;
+			outline:none;
+			cursor: pointer;
+		}
+		/*send end*/
+  </style> 
+ </head>
+ <body>
+	<div class="container">
+		<!--header start-->
+		<div class="header">
+			<div class="logo">
+				<img src="./images/logo.png">
+			</div>
+			<div class="hide">X</div>
+		</div>
+		<!--header end-->
+
+		<!--center start-->
+		<div class="center">
+		<!--
+			<div class="left">
+				<img src="./images/jimi.png" width="50" height="50">
+				<span class="msg">
+					你好，我是Zachary，有什么可以为你效劳的呢？
+				</span>
+			</div>
+			<div class="right">
+				<span class="msg">
+					在吗
+				</span>
+				<img src="./images/job.jpg" width="50" height="50">
+			</div>
+			-->
+		</div>
+		<!--center end-->
+
+		<!--send start-->
+		<div class="send">
+			<input type="text" id="sendContent" placeholder="亲爱的，请描述你的问题~">
+			<div class="bottom">
+				<span>满意度调查</span>
+				<span>教我说话吧</span>
+				<button id="button">发送</button>
+			</div>
+		</div>
+		<!--send start-->
+	</div>
+
+	<script type="text/javascript" src="js/jquery-1.10.2.min.js">
+	</script>
+	<script type="text/javascript">
+		$(function(){
+			// alert("这是个聊天机器人");
+			/*
+			var htmlr = "<div class='right'><span class='msg'>在吗</span><img src='./images/job.jpg' width='50' height='50'></div>"
+			*/
+			var htmll = "<div class='left'<img src='./images/jimi.png' width='50' height='50'<span class='msg'>你好，我是Zachary，有什么可以为你效劳的呢？</span></div>"
+
+
+			$(".center").append(htmll);
+		});
+		$("#button").click(function(){
+			var content = $("#sendContent").val();
+			var center = $(".center");
+			// alert(content);
+			var htmlr = "<div class='right'><span class='msg'>"+content+"</span><img src='./images/job.jpg' width='50' height='50'></div>"
+			center.append(htmlr);
+			$("#sendContent").val("");
+
+			$.ajax({
+				type:"get",
+				url:"http://www.tuling123.com/openapi/api?key=49de46c409c047d19b2ed2285e8775a6&info="+content,
+				success:function(result){
+					var obj = result;
+					var tmp = "<span>"+obj.text+"</span>"
+					if (obj.url) {
+						tmp+= "<a href='"+obj.url+"' target='_blank'>"+obj.text+"</a>"
+					}
+
+					var htmll = "<div class='left'<img src='./images/jimi.png' width='50' height='50'<span class='msg'>"+tmp+"</span></div>"
+					center.append(htmll);
+					center.scrollTop(center[0].scrollHeight);
+				}
+			});
+		});
+			window.onkeydown=function(e){
+				var key = e.keyCode;
+				//alert(key);
+				if (key == 13) {
+					$("#button").click();
+				}
+			}
+	</script>
+ </body>
+</html>
